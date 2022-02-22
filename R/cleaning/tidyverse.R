@@ -15,8 +15,10 @@
 if(!require(readr)) install.packages("readr"); library(readr)
 if(!require(dplyr)) install.packages("dplyr"); library(dplyr)
 if(!require(tidyr)) install.packages("tidyr"); library(tidyr)
+if(!require(stringr)) install.packages("stringr"); library(stringr)
 
 # Data import -----------------------------------------------------------------
+## Cattle market reports
 lajunta <- read_csv("data/csv/LJMR.csv",
                     col_names = TRUE,
                     col_types = list(col_date(format = "%m-%d-%Y"),
@@ -28,26 +30,37 @@ lajunta <- read_csv("data/csv/LJMR.csv",
                                      col_character(),
                                      col_character()),
                     num_threads = 8,
-                    lazy = FALSE)
+                    lazy = FALSE) %>% 
+  rename_with(str_to_lower)
+
+## Movie reviews
+reviews <- read_csv("data/csv/netflix-rotten-tomatoes-metacritic-imdb.csv",
+                    col_names = TRUE,
+                    num_threads = 8,
+                    lazy = TRUE) %>% 
+  dplyr::select(title = Title, release_date = `Release Date`)
 
 
 # Grouping --------------------------------------------------------------------
 # When does the minimum price appear for each reproductive status?
 lajunta %>% 
-  group_by(Reprod) %>% 
-  filter(Price == min(Price))
+  group_by(reprod) %>% 
+  filter(price == min(price)) %>% 
+  ungroup() %>% 
+  distinct(reprod, .keep_all = TRUE) %>% 
+  dplyr::select(date, reprod)
 
 # Aggregate market reports
 weekly_sales <- lajunta %>% 
-  group_by(Date, Reprod) %>% 
-  summarize(avg_price = median(Price), .groups = "drop")
+  group_by(date, reprod) %>% 
+  summarize(avg_price = median(price), .groups = "drop")
 
 
 # Pivot Operations ------------------------------------------------------------
 # How many weeks did each reproductive status have zero reported sales?
 weekly_sales %>% 
-  filter(!is.na(Reprod)) %>% 
-  pivot_wider(names_from = Reprod,
+  filter(!is.na(reprod)) %>% 
+  pivot_wider(names_from = reprod,
               values_from = avg_price) %>% 
   summarize(
     across(
@@ -59,3 +72,4 @@ weekly_sales %>%
 
 
 # Joins -----------------------------------------------------------------------
+# Which movies took place at the same time as a market report sale?
