@@ -4,6 +4,9 @@
 ## Add a key using row numbers (row_number())
 ## Find something to count()
 ## filter for first n rows by group
+## separate() and unite()
+## use a dictionary
+## perform a join
 ######myt2 <- myt %>%
 ######  group_by(groupcol) %>%
 ######  slice(1:n)
@@ -17,10 +20,10 @@ if(!require(tidyr)) install.packages("tidyr"); library(tidyr)
 if(!require(stringr)) install.packages("stringr"); library(stringr)
 
 
+
 # Data import -----------------------------------------------------------------
 ## Cattle market reports
-cattle <- read_csv("data/csv/LJMR.csv",
-                   col_names = TRUE,
+cattle <- read_csv("data/csv/lmjr.csv",
                    col_types = list(col_date(format = "%m-%d-%Y"),
                                     col_character(),
                                     col_double(),
@@ -33,17 +36,36 @@ cattle <- read_csv("data/csv/LJMR.csv",
                    lazy = FALSE) %>% 
   rename_with(str_to_lower)
 
-## Movie reviews
-reviews <- read_csv("data/csv/netflix-rotten-tomatoes-metacritic-imdb.csv",
-                    col_names = TRUE,
-                    col_select = list(title = Title,
-                                      release_date = `Release Date`,
-                                      numvotes = `IMDb Votes`),
-                    col_types = list(col_character(),
+# Data pulled from this link via web scraping behind the scenes:
+# http://climate.colostate.edu/data_access.html
+weather <- read_csv("data/csv/cheraw_1_n_weather_station_data.csv",
+                    col_types = list(col_date(),
                                      col_character(),
-                                     col_integer()),
+                                     col_character(),
+                                     col_character(),
+                                     col_character()),
                     num_threads = 8,
-                    lazy = TRUE)
+                    lazy = FALSE) %>% 
+  rename(weather = `CHERAW 1 N`,
+         max_temp = maxt,
+         min_temp = mint)
+
+
+# Formatting ------------------------------------------------------------------
+# According to the documentation page, http://climate.colostate.edu/readme.html,
+# 'T' corresponds to 'trace' (very little precipitation)
+# 'M' corresponds to 'missing'
+# 'S' does not have a mapping in Colorado State's README so it becomes NA
+default_values <- function(x){
+  parse_number(
+    case_when(x == "T" ~ "0",
+              x == "M" ~ "NA",
+              x == "S" ~ "NA",
+              TRUE ~ x)
+  )
+}
+weather <- weather %>% 
+  mutate(across(where(is.character), default_values))
 
 
 # Grouping --------------------------------------------------------------------
@@ -76,20 +98,4 @@ weekly_sales %>%
 
 
 # Joins -----------------------------------------------------------------------
-## Planning to join the movie reviews to the cattle market reports
-## but the movie data needs a date conversion first
-month_nums <- structure(seq_along(month.abb), names = month.abb)
-reviews <- reviews %>% 
-  separate(col = release_date,
-           into = c("d", "m", "y"),
-           sep = " ",
-           remove = FALSE) %>% 
-  mutate(m = month_nums[m]) %>% 
-  filter(as.integer(y) >= 2016) %>% 
-  unite(col = formatted_date, m, d, y, sep = "-") %>% 
-  mutate(formatted_date = as.Date(formatted_date, "%m-%d-%Y"))
 
-# Which movies took place at the same time as a market report sale?
-left_join(weekly_sales, reviews, by = c("date" = "formatted_date")) %>% 
-  filter(!is.na(title)) %>% 
-  distinct(date, title)
