@@ -19,31 +19,36 @@ if(!require(stringr)) install.packages("stringr"); library(stringr)
 
 # Data import -----------------------------------------------------------------
 ## Cattle market reports
-lajunta <- read_csv("data/csv/LJMR.csv",
-                    col_names = TRUE,
-                    col_types = list(col_date(format = "%m-%d-%Y"),
-                                     col_character(),
-                                     col_double(),
-                                     col_character(),
-                                     col_double(),
-                                     col_double(),
-                                     col_character(),
-                                     col_character()),
-                    num_threads = 8,
-                    lazy = FALSE) %>% 
+cattle <- read_csv("data/csv/LJMR.csv",
+                   col_names = TRUE,
+                   col_types = list(col_date(format = "%m-%d-%Y"),
+                                    col_character(),
+                                    col_double(),
+                                    col_character(),
+                                    col_double(),
+                                    col_double(),
+                                    col_character(),
+                                    col_character()),
+                   num_threads = 8,
+                   lazy = FALSE) %>% 
   rename_with(str_to_lower)
 
 ## Movie reviews
 reviews <- read_csv("data/csv/netflix-rotten-tomatoes-metacritic-imdb.csv",
                     col_names = TRUE,
+                    col_select = list(title = Title,
+                                      release_date = `Release Date`,
+                                      numvotes = `IMDb Votes`),
+                    col_types = list(col_character(),
+                                     col_character(),
+                                     col_integer()),
                     num_threads = 8,
-                    lazy = TRUE) %>% 
-  dplyr::select(title = Title, release_date = `Release Date`)
+                    lazy = TRUE)
 
 
 # Grouping --------------------------------------------------------------------
-# When does the minimum price appear for each reproductive status?
-lajunta %>% 
+# When does the minimum price appear for each cattle reproductive status?
+cattle %>% 
   group_by(reprod) %>% 
   filter(price == min(price)) %>% 
   ungroup() %>% 
@@ -51,13 +56,13 @@ lajunta %>%
   dplyr::select(date, reprod)
 
 # Aggregate market reports
-weekly_sales <- lajunta %>% 
+weekly_sales <- cattle %>% 
   group_by(date, reprod) %>% 
   summarize(avg_price = median(price), .groups = "drop")
 
 
 # Pivot Operations ------------------------------------------------------------
-# How many weeks did each reproductive status have zero reported sales?
+# How many weeks did each cattle reproductive status have zero reported sales?
 weekly_sales %>% 
   filter(!is.na(reprod)) %>% 
   pivot_wider(names_from = reprod,
