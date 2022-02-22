@@ -1,6 +1,5 @@
 # To do
 ## add a case_when() call in there somewhere.
-## Find another source of data to join to the La Junta data.
 ## Perform a calculation using a lead or lag by group
 ## Add a key using row numbers (row_number())
 ## Find something to count()
@@ -16,6 +15,7 @@ if(!require(readr)) install.packages("readr"); library(readr)
 if(!require(dplyr)) install.packages("dplyr"); library(dplyr)
 if(!require(tidyr)) install.packages("tidyr"); library(tidyr)
 if(!require(stringr)) install.packages("stringr"); library(stringr)
+
 
 # Data import -----------------------------------------------------------------
 ## Cattle market reports
@@ -75,6 +75,21 @@ weekly_sales %>%
   )
 
 
-
 # Joins -----------------------------------------------------------------------
+## Planning to join the movie reviews to the cattle market reports
+## but the movie data needs a date conversion first
+month_nums <- structure(seq_along(month.abb), names = month.abb)
+reviews <- reviews %>% 
+  separate(col = release_date,
+           into = c("d", "m", "y"),
+           sep = " ",
+           remove = FALSE) %>% 
+  mutate(m = month_nums[m]) %>% 
+  filter(as.integer(y) >= 2016) %>% 
+  unite(col = formatted_date, m, d, y, sep = "-") %>% 
+  mutate(formatted_date = as.Date(formatted_date, "%m-%d-%Y"))
+
 # Which movies took place at the same time as a market report sale?
+left_join(weekly_sales, reviews, by = c("date" = "formatted_date")) %>% 
+  filter(!is.na(title)) %>% 
+  distinct(date, title)
