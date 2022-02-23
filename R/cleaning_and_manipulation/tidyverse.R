@@ -3,6 +3,10 @@
 ## Add a key using row numbers (row_number())
 
 
+# Description -----------------------------------------------------------------
+# This script performs cleaning operations and simple calculations tabular
+# data.
+
 
 # Notes -----------------------------------------------------------------------
 # The select() function is a common function name, so the namespace should
@@ -14,7 +18,6 @@ if(!require(readr)) install.packages("readr"); library(readr)
 if(!require(dplyr)) install.packages("dplyr"); library(dplyr)
 if(!require(tidyr)) install.packages("tidyr"); library(tidyr)
 if(!require(stringr)) install.packages("stringr"); library(stringr)
-
 
 
 # Data import -----------------------------------------------------------------
