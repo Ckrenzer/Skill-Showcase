@@ -18,7 +18,6 @@ cattle <- fread("data/csv/lmjr.csv",
                   "character",
                   "double",
                   "double",
-                  "character",
                   "character"),
                 nThread = 8)
 

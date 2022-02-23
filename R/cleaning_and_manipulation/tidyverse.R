@@ -25,7 +25,6 @@ cattle <- read_csv("data/csv/lmjr.csv",
                                     col_character(),
                                     col_double(),
                                     col_double(),
-                                    col_character(),
                                     col_character()),
                    num_threads = 8,
                    lazy = FALSE) %>% 
