@@ -1,4 +1,5 @@
 # Description -----------------------------------------------------------------
+# Performs the same operations as those in datatable.R.
 # This script performs cleaning operations and simple calculations on tabular
 # data.
 
@@ -46,7 +47,7 @@ month_nums <- structure(seq_along(month.abb), names = month.abb)
 weather <- weather %>%
   separate(record_date, into = c("d", "m", "y")) %>% 
   mutate(m = month_nums[m]) %>% 
-  filter(as.integer(y) >= 2016) %>% 
+  filter(as.integer(y) >= 2016L) %>% 
   unite(col = record_date, d, m, y, sep = "-") %>% 
   mutate(record_date = as.Date(record_date, "%d-%m-%Y"))
 
