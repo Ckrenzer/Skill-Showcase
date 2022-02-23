@@ -113,6 +113,10 @@ business_climate <- left_join(weekly_sales, weather,
 
 # Lags ------------------------------------------------------------------------
 lagsum <- function(x, n = laglen){
+  # Replaces NA values with zeros--this implementation is not perfect
+  # and will only calculate the sum of those previous n weeks for which
+  # there is data instead of returning NA when a missing value is found
+  # within the 'set' of n values
   x[is.na(x)] <- 0
   cs <- cumsum(x)
   suml <- c(rep_len(NA, n - 1), tail(cs, -(n - 1)) - c(0, head(cs, -n)))
