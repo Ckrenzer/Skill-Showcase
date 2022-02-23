@@ -1,12 +1,8 @@
 # To do
-## add a case_when() call in there somewhere.
 ## Perform a calculation using a lead or lag by group
 ## Add a key using row numbers (row_number())
 ## Find something to count()
 ## filter for first n rows by group
-## separate() and unite()
-## use a dictionary
-## perform a join
 ######myt2 <- myt %>%
 ######  group_by(groupcol) %>%
 ######  slice(1:n)
@@ -36,22 +32,26 @@ cattle <- read_csv("data/csv/lmjr.csv",
                    lazy = FALSE) %>% 
   rename_with(str_to_lower)
 
+# Weather data from a facility near the sale barns in the cattle data set
 # Data pulled from this link via web scraping behind the scenes:
 # http://climate.colostate.edu/data_access.html
+# (I took some liberties to showcase different cleaning techniques)
 weather <- read_csv("data/csv/cheraw_1_n_weather_station_data.csv",
-                    col_types = list(col_date(),
-                                     col_character(),
-                                     col_character(),
-                                     col_character(),
-                                     col_character()),
+                    col_types = list("c", "c", "c", "c", "c"),
                     num_threads = 8,
-                    lazy = FALSE) %>% 
-  rename(weather = `CHERAW 1 N`,
-         max_temp = maxt,
-         min_temp = mint)
+                    lazy = FALSE)
 
 
 # Formatting ------------------------------------------------------------------
+# Date formatting
+month_nums <- structure(seq_along(month.abb), names = month.abb)
+weather <- weather %>%
+  separate(record_date, into = c("d", "m", "y")) %>% 
+  mutate(m = month_nums[m]) %>% 
+  filter(as.integer(y) >= 2016) %>% 
+  unite(col = record_date, d, m, y, sep = "-") %>% 
+  mutate(record_date = as.Date(record_date, "%d-%m-%Y"))
+
 # According to the documentation page, http://climate.colostate.edu/readme.html,
 # 'T' corresponds to 'trace' (very little precipitation)
 # 'M' corresponds to 'missing'
@@ -64,8 +64,7 @@ default_values <- function(x){
               TRUE ~ x)
   )
 }
-weather <- weather %>% 
-  mutate(across(where(is.character), default_values))
+weather <- mutate(weather, across(where(is.character), default_values))
 
 
 # Grouping --------------------------------------------------------------------
@@ -98,4 +97,7 @@ weekly_sales %>%
 
 
 # Joins -----------------------------------------------------------------------
+# How was the weather on Sale Tuesdays?
+business_climate <- left_join(weekly_sales, weather,by = c("date" = "record_date"))
+
 
