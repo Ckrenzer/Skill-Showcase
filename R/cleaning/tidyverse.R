@@ -1,12 +1,12 @@
 # To do
 ## Perform a calculation using a lead or lag by group
 ## Add a key using row numbers (row_number())
-## Find something to count()
-## filter for first n rows by group
-######myt2 <- myt %>%
-######  group_by(groupcol) %>%
-######  slice(1:n)
-## use an arrange() call
+
+
+
+# Notes -----------------------------------------------------------------------
+# The select() function is a common function name, so the namespace should
+# always be specified when using it (e.g. dplyr::select(), MASS::select(), etc.)
 
 
 # Packages --------------------------------------------------------------------
@@ -76,7 +76,19 @@ cattle %>%
   distinct(reprod, .keep_all = TRUE) %>% 
   dplyr::select(date, reprod)
 
-# Aggregate market reports
+# Which sale had the most buyers?
+cattle %>% 
+  distinct(buyer, date) %>% 
+  count(date) %>% 
+  arrange(desc(n))
+
+# Which three buyers bought the most cattle at each sale?
+cattle %>%
+  group_by(date, buyer) %>%
+  summarize(quantity = sum(quantity)) %>% 
+  slice(1:3)
+
+# Aggregate market reports by price
 weekly_sales <- cattle %>% 
   group_by(date, reprod) %>% 
   summarize(avg_price = median(price), .groups = "drop")
@@ -86,8 +98,7 @@ weekly_sales <- cattle %>%
 # How many weeks did each cattle reproductive status have zero reported sales?
 weekly_sales %>% 
   filter(!is.na(reprod)) %>% 
-  pivot_wider(names_from = reprod,
-              values_from = avg_price) %>% 
+  pivot_wider(names_from = reprod, values_from = avg_price) %>% 
   summarize(
     across(
       where(~ class(.x) == "numeric"),
@@ -96,8 +107,10 @@ weekly_sales %>%
   )
 
 
-# Joins -----------------------------------------------------------------------
-# How was the weather on Sale Tuesdays?
-business_climate <- left_join(weekly_sales, weather,by = c("date" = "record_date"))
+# Joining ---------------------------------------------------------------------
+# How was the weather on sale days?
+business_climate <- left_join(weekly_sales, weather,
+                              by = c("date" = "record_date"))
+
 
 
