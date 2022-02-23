@@ -1,10 +1,5 @@
-# To do
-## Perform a calculation using a lead or lag by group
-## Add a key using row numbers (row_number())
-
-
 # Description -----------------------------------------------------------------
-# This script performs cleaning operations and simple calculations tabular
+# This script performs cleaning operations and simple calculations on tabular
 # data.
 
 
@@ -116,4 +111,17 @@ business_climate <- left_join(weekly_sales, weather,
                               by = c("date" = "record_date"))
 
 
-
+# Lags ------------------------------------------------------------------------
+lagsum <- function(x, n = laglen){
+  x[is.na(x)] <- 0
+  cs <- cumsum(x)
+  suml <- c(rep_len(NA, n - 1), tail(cs, -(n - 1)) - c(0, head(cs, -n)))
+  suml[n] <- NA
+  suml
+}
+# I imagine that the amount of snowfall in the previous two weeks would
+# affect the sales of cattle
+laglen <- 2
+business_climate %>% 
+  mutate(price_l4 = lag(snow, n = laglen),
+         sum_price_l4 = lagsum(price_l4))
