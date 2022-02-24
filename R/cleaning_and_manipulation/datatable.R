@@ -1,4 +1,6 @@
 # Description -----------------------------------------------------------------
+# This script performs cleaning operations and simple calculations on tabular
+# data.
 # Performs the same operations as those in tidyverse.R.
 # I'm a dplyr guy at heart, but I understand why people might feel compelled
 # to use data.table. An often under-rated reason is its backwards compatibility.
@@ -120,3 +122,4 @@ business_climate <- weather[weekly_sales, on = .(record_date = date)]
 # affect the sales of cattle
 laglen <- 2
 business_climate[, snowlag_sum := frollsum(x = snow, n = laglen)]
+business_climate

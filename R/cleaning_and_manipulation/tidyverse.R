@@ -1,7 +1,7 @@
 # Description -----------------------------------------------------------------
-# Performs the same operations as those in datatable.R.
 # This script performs cleaning operations and simple calculations on tabular
 # data.
+# Performs the same operations as those in datatable.R.
 
 
 # Notes -----------------------------------------------------------------------
