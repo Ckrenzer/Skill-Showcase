@@ -80,10 +80,12 @@ cattle %>%
   count(date) %>% 
   arrange(desc(n))
 
-# Which three buyers bought the most cattle at each sale?
+# For each sale, which three buyers bought the most livestock?
 cattle %>%
   group_by(date, buyer) %>%
-  summarize(quantity = sum(quantity)) %>% 
+  summarize(quantity = sum(quantity)) %>%
+  arrange(date, desc(quantity)) %>% 
+  group_by(date) %>% 
   slice(1:3)
 
 # Aggregate market reports by price
@@ -123,8 +125,7 @@ lagsum <- function(x, n = laglen){
   suml[n] <- NA
   suml
 }
-# I imagine that the amount of snowfall in the previous two weeks would
-# affect the sales of cattle
+# The amount of snowfall in the previous two weeks likely affects cattle sales
 laglen <- 2
 business_climate %>% 
   mutate(price_l4 = lag(snow, n = laglen),

@@ -37,7 +37,7 @@ weather <- fread("data/csv/cheraw_1_n_weather_station_data.csv",
 # Formatting ------------------------------------------------------------------
 # Standardizing column names and date formatting
 setnames(cattle, old = colnames(cattle), str_to_lower(colnames(cattle)))
-cattle[, date := as.Date(date, "%m-%d-%Y")]
+cattle[, date := as.Date(date, "%Y-%m-%d")]
 
 # Date formatting
 month_nums <- structure(seq_along(month.abb), names = month.abb)
@@ -69,29 +69,29 @@ set(weather,
 
 # Grouping --------------------------------------------------------------------
 # When does the minimum price appear for each cattle reproductive status?
-cattle %>% 
-  group_by(reprod) %>% 
-  filter(price == min(price)) %>% 
-  ungroup() %>% 
-  distinct(reprod, .keep_all = TRUE) %>% 
-  dplyr::select(date, reprod)
+# (Ties are broken by taking the first index returned by .I for each group)
+minprice_indexes <- cattle[,
+                           .(minprice = .I[price == min(price)][[1]]),
+                           by = reprod]$minprice
+cattle[minprice_indexes, .(date, reprod)]
 
 # Which sale had the most buyers?
-cattle %>% 
-  distinct(buyer, date) %>% 
-  count(date) %>% 
-  arrange(desc(n))
+unique(cattle[, .(buyer, date)])[, .N, by = date][order(-N)]
 
-# Which three buyers bought the most cattle at each sale?
-cattle %>%
-  group_by(date, buyer) %>%
-  summarize(quantity = sum(quantity)) %>% 
-  slice(1:3)
+# For each sale, which three buyers bought the most livestock?
+##                         Aggregate to find top buyers                         Sort
+top_quantities <- cattle[, .(quantity = sum(quantity)), keyby = .(date, buyer)][order(date, -quantity)]
+top_quantities_indexes <- topquantities[, .(indexes = .I[1:3]), by = .(date)]$indexes
+top_quantities[top_quantities_indexes]
 
 # Aggregate market reports by price
-weekly_sales <- cattle %>% 
-  group_by(date, reprod) %>% 
-  summarize(avg_price = median(price), .groups = "drop")
+weekly_sales <- cattle[, .(avg_price = median(price)), keyby = .(date, reprod)]
+
+
+
+
+
+
 
 
 # Pivot Operations ------------------------------------------------------------
