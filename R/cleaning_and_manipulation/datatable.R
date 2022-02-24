@@ -9,6 +9,7 @@ if(!require(data.table)) install.packages("data.table"); library(data.table)
 if(!require(stringr)) install.packages("stringr"); library(stringr)
 
 
+# Data import -----------------------------------------------------------------
 ## Cattle market reports
 cattle <- fread("data/csv/lmjr.csv",
                 colClasses = c(
@@ -88,29 +89,18 @@ top_quantities[top_quantities_indexes]
 weekly_sales <- cattle[, .(avg_price = median(price)), keyby = .(date, reprod)]
 
 
-
-
-
-
-
-
 # Pivot Operations ------------------------------------------------------------
 # How many weeks did each cattle reproductive status have zero reported sales?
-weekly_sales %>% 
-  filter(!is.na(reprod)) %>% 
-  pivot_wider(names_from = reprod, values_from = avg_price) %>% 
-  summarize(
-    across(
-      where(~ class(.x) == "numeric"),
-      ~ sum(is.na(.x))
-    )
-  )
+numeric_cols <- unique(weekly_sales[!is.na(reprod)]$reprod)
+weekly_sales_wide <- dcast(weekly_sales[!is.na(reprod)],
+                           formula = date ~ reprod,
+                           value.var = "avg_price")
+vapply(weekly_sales_wide[, ..numeric_cols], function(x) sum(is.na(x)), integer(1))
 
 
 # Joining ---------------------------------------------------------------------
 # How was the weather on sale days?
-business_climate <- left_join(weekly_sales, weather,
-                              by = c("date" = "record_date"))
+business_climate <- weekly_sales[weather, on = c("date" = "record_date")]
 
 
 # Lags ------------------------------------------------------------------------
@@ -129,5 +119,5 @@ lagsum <- function(x, n = laglen){
 # affect the sales of cattle
 laglen <- 2
 business_climate %>% 
-  mutate(price_l4 = lag(snow, n = laglen),
+  mutate(price_l4 = shift(snow, n = laglen, type = "lag"),
          sum_price_l4 = lagsum(price_l4))
