@@ -61,18 +61,10 @@ default_values <- function(x){
           default, x)
   ))
 }
-
-
-# ALL SET UP TO THIS POINT
-
-
-
-
-
-
-
-
-weather <- mutate(weather, across(where(is.character), default_values))
+string_cols <- vapply(weather, is.character, logical(1))
+set(weather,
+    j = which(string_cols),
+    value = lapply(weather[, ..string_cols], FUN = default_values))
 
 
 # Grouping --------------------------------------------------------------------
