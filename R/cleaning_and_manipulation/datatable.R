@@ -81,7 +81,7 @@ set(weather,
 
 # Grouping --------------------------------------------------------------------
 # When does the minimum price appear for each cattle reproductive status?
-# (Ties are broken by taking the first index returned by .I for each group)
+## (Ties are broken by taking the first index returned by .I for each group)
 minprice_indexes <- cattle[,
                            .(minprice = .I[price == min(price)][[1]]),
                            by = reprod]$minprice
@@ -116,8 +116,7 @@ business_climate <- weather[weekly_sales, on = .(record_date = date)]
 
 
 # Lags ------------------------------------------------------------------------
-# I imagine that the amount of snowfall in the previous two weeks would
-# affect the sales of cattle
+# The amount of snowfall in the previous two weeks likely affects cattle sales
 laglen <- 2
 business_climate[, snowlag_sum := frollsum(x = snow, n = laglen)]
 business_climate
