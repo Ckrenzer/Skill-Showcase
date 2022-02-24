@@ -4,6 +4,17 @@
 # to use data.table. An often under-rated reason is its backwards compatibility.
 
 
+# Notes -----------------------------------------------------------------------
+# data.table::frollsum() and my custom lagsum() from tidyverse.R handle
+# missing values differently, but they more or less do the same thing.
+# Each operation results in values identical to those in tidyverse.R
+# (with the one exception being small differences between frollsum()
+# and lagsum()).
+# This file uses more intermediate values. Sometimes this choice is to
+# preserve the 80-characters-per-line limit, while other times the
+# intermediate values simply makes the code easier to read.
+
+
 # Packages --------------------------------------------------------------------
 if(!require(data.table)) install.packages("data.table"); library(data.table)
 if(!require(stringr)) install.packages("stringr"); library(stringr)
@@ -100,24 +111,12 @@ vapply(weekly_sales_wide[, ..numeric_cols], function(x) sum(is.na(x)), integer(1
 
 # Joining ---------------------------------------------------------------------
 # How was the weather on sale days?
-business_climate <- weekly_sales[weather, on = c("date" = "record_date")]
+#setnames(weather, old = "record_date", new = "date")
+business_climate <- weather[weekly_sales, on = .(record_date = date)]
 
 
 # Lags ------------------------------------------------------------------------
-lagsum <- function(x, n = laglen){
-  # Replaces NA values with zeros--this implementation is not perfect
-  # and will only calculate the sum of those previous n weeks for which
-  # there is data instead of returning NA when a missing value is found
-  # within the 'set' of n values
-  x[is.na(x)] <- 0
-  cs <- cumsum(x)
-  suml <- c(rep_len(NA, n - 1), tail(cs, -(n - 1)) - c(0, head(cs, -n)))
-  suml[n] <- NA
-  suml
-}
 # I imagine that the amount of snowfall in the previous two weeks would
 # affect the sales of cattle
 laglen <- 2
-business_climate %>% 
-  mutate(price_l4 = shift(snow, n = laglen, type = "lag"),
-         sum_price_l4 = lagsum(price_l4))
+business_climate[, snowlag_sum := frollsum(x = snow, n = laglen)]

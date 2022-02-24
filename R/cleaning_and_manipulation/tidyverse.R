@@ -19,7 +19,7 @@ if(!require(stringr)) install.packages("stringr"); library(stringr)
 # Data import -----------------------------------------------------------------
 ## Cattle market reports
 cattle <- read_csv("data/csv/lmjr.csv",
-                   col_types = list(col_date(format = "%m-%d-%Y"),
+                   col_types = list(col_date(format = "%Y-%m-%d"),
                                     col_character(),
                                     col_double(),
                                     col_character(),
@@ -128,5 +128,5 @@ lagsum <- function(x, n = laglen){
 # The amount of snowfall in the previous two weeks likely affects cattle sales
 laglen <- 2
 business_climate %>% 
-  mutate(price_l4 = lag(snow, n = laglen),
-         sum_price_l4 = lagsum(price_l4))
+  mutate(snow_l2 = lag(snow, n = laglen),
+         snowlag_sum = lagsum(snow_l2))
