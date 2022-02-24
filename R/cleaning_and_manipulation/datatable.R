@@ -2,8 +2,6 @@
 # This script performs cleaning operations and simple calculations on tabular
 # data.
 # Performs the same operations as those in tidyverse.R.
-# I'm a dplyr guy at heart, but I understand why people might feel compelled
-# to use data.table. An often under-rated reason is its backwards compatibility.
 
 
 # Notes -----------------------------------------------------------------------
