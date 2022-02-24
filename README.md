@@ -14,12 +14,12 @@ Provides code samples for different coding applications and frameworks. My aim i
 
 
 ## R
-I wrote my first ever line of code in R. That fateful day was January 27th, 2020. Since then I've fallen in love with the language and decided to see how far I could take it! R is essentially my means of making a living and for that I am grateful. I'm a dplyr guy at heart, but data.table has been the primary tool my co-workers use. That necessarily makes data.table my primary tool in professional settings. Personally, I find data.table unintuitive and hard to fit on one line; data.table sacrifices intuition and readability for speed. You see, R was never meant to be 'fast'--it is supposed to simplify data analysis. In this way, dplyr complements R's strengths as a language quite well. If you want to know what I *really* think, data.table compensates R's slower run time speed but stifles the features of the language that make it stand out from competitors (Python, primarily). In some final sense, if you have to rely on data.table for your everyday work, you are using the wrong tool for the job--Julia seems better suited for these tasks. I do appreciate data.table's backward compatibility, however.
+January 27th, 2020 was the day when I wrote my first ever line of code. It was written in R. Much has changed since the beginning of 2020, but I've since fallen in love with the language and decided to see how far I could take it! R is essentially my means of making a living and for that I am grateful. I'm a dplyr guy at heart, but data.table has been the primary tool my co-workers use. That necessarily makes data.table my primary tool in professional settings. Personally, I find data.table unintuitive and hard to fit on one line; data.table sacrifices intuition and readability for speed. You see, R was never meant to be 'fast'--it is supposed to simplify data analysis. To this end, dplyr complements R's strengths as a language quite well. If you want to know what I *really* think, data.table compensates R's slower run time speed but stifles the features of the language that make it stand out from competitors (Python, primarily) with its nebulous syntax. I think that if you have to rely on data.table for your everyday work, you are using the wrong tool for the job--Julia seems better suited for these tasks. I do appreciate data.table's backward compatibility, however.
 
 ### R Directories
 
-#### cleaning/
-Showcases my approach to cleaning data.
+#### cleaning_and_manipulation/
+Showcases my approach to cleaning, along with common calculations on tabular data.
 
 #### metaprogramming/
 Showcases some key skills pertaining to metaprogramming (aka tidy evaluation) and its application in data analysis.
