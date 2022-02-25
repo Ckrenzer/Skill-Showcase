@@ -53,4 +53,4 @@ Contains a subset of cattle sales I've been scraping since November, 2020. The c
 
 ### CRISTO
 
-Contains Chapter 8 of *The Count of Monte Cristo* by Alexandre Dumas. I scraped this from [Project Gutenberg](https://www.gutenberg.org/cache/epub/1184/pg1184.txt) and attempted to clean it, so discrepancies between the text you see on the website and the text in the .txt file here may exist.
+Contains Chapter 20 of *The Count of Monte Cristo* by Alexandre Dumas ('The Cemetery of the Château d’If'). I scraped this from [Project Gutenberg](https://www.gutenberg.org/cache/epub/1184/pg1184.txt) and attempted to clean it, so discrepancies between the text you see on the website and the text in the .txt file here may exist.
