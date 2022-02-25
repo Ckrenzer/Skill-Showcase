@@ -30,22 +30,22 @@ Short for 'La Junta Market Reports'. Collected from [Winter Livestock's weekly m
 
 Contains a subset of cattle sales I've been scraping since November, 2020. The column 'Reprod' corresponds to whether the livestock is a cow, bull, steer, or heifer. I didn't know a good name for this categorization, so 'Reprod' is what I tentatively decided on in December 2020. I couldn't find an industry standard. Unless there is a word used as the industry standard to classify this distinction, 'Reprod' is what I plan to continue using for the foreseeable future.
 
-- Date: The date in which the auction ('Sale Tuesday') takes place. The first day is used for multi-day auctions.
-- Buyer: The name of the buyer who made a purchase.
-- Quantity: The number sold at auction.
-- Type: The type of cattle. 'ang' corresponds to 'angus', 'lim' corresponds to 'limousine', and so on. 'clr' is a catch-all type for when there were too few observations worth caring about or only the color of the cattle was specified in the market report.
-- Weight: The average weight of the cattle purchased.
-- Price: The average price per pound, measured in cents.
-- Reprod: The 'reproductive status' of the livestock. Was it a cow, bull, steer, or heifer?
+- **Date:** The date in which the auction ('Sale Tuesday') takes place. The first day is used for multi-day auctions.
+- **Buyer:** The name of the buyer who made a purchase.
+- **Quantity:** The number sold at auction.
+- **Type:** The type of cattle. 'ang' corresponds to 'angus', 'lim' corresponds to 'limousine', and so on. 'clr' is a catch-all type for when there were too few observations worth caring about or only the color of the cattle was specified in the market report.
+- **Weight:** The average weight of the cattle purchased.
+- **Price:** The average price per pound, measured in cents.
+- **Reprod:** The 'reproductive status' of the livestock. Was it a cow, bull, steer, or heifer?
 
 ### CHERAW_1_N_WEATHER_STATION
 'CHERAW_1_N' is a weather station near La Junta, CO. This was scraped from Colorado State's [Colorado Climate Center](http://climate.colostate.edu/data_access.html). I took some liberties 'dirtying' the date column behind the scenes to showcase different cleaning techniques, so the format provided by CSU's website will look different.
 
-- record_date: The date that weather data was collected. Recorded daily.
-- maxtemp: The day's maximum recorded temperature in Fahrenheit.
-- mintemp: The day's minimum recorded temperature in Fahrenheit.
-- pcpn: The amount of precipitation in inches.
-- snow: The amount of snow in inches.
+- **record_date:** The date that weather data was collected. Recorded daily.
+- **maxtemp:** The day's maximum recorded temperature in Fahrenheit.
+- **mintemp:** The day's minimum recorded temperature in Fahrenheit.
+- **pcpn:** The amount of precipitation in inches.
+- **snow:** The amount of snow in inches.
 
 
 
