@@ -4,9 +4,7 @@ rm(weather, weekly_sales, month_nums, default_values, business_climate, laglen, 
 
 
 # Data Import -----------------------------------------------------------------
-buyers <- cattle$buyer
+buyers <- unique(cattle$buyer)
 cristo <- read_lines("data/txt/cristo.txt")
-
-
 
 cristo
