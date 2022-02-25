@@ -1,5 +1,3 @@
-ADD LINKS TO THE DIRECTORIES ON GITHUB AFTER YOU PUSH!
-
 # Skill-Showcase
 Provides code samples for different coding applications and frameworks. My aim is to give you a big picture idea of 'what I know.'
 
@@ -10,7 +8,7 @@ Provides code samples for different coding applications and frameworks. My aim i
 ## SQL
 
 
-## R
+## [R](https://github.com/Ckrenzer/Skill-Showcase/tree/main/R)
 January 27th, 2020 was the day when I wrote my first ever line of code. It was written in R. Much has changed since the beginning of 2020, but I've since fallen in love with the language and decided to see how far I could take it! R is essentially my means of making a living and for that I am grateful. I'm a dplyr guy at heart, but data.table has been the primary tool my co-workers use. That necessarily makes data.table my primary tool in professional settings. Personally, I find data.table unintuitive and hard to fit on one line; data.table sacrifices intuition and readability for speed. You see, R was never meant to be 'fast'--it is supposed to simplify data analysis. To this end, dplyr complements R's strengths as a language quite well. If you want to know what I *really* think, data.table compensates R's slower run time speed but stifles the features of the language that make it stand out from competitors (Python, primarily) with its nebulous syntax. I think that if you have to rely on data.table for your everyday work, you are using the wrong tool for the job--Julia seems better suited for these tasks. I do appreciate data.table's backward compatibility, however.
 
 
@@ -23,9 +21,9 @@ I was, unfortunately, born a Windows user. I used XP as a kid and never really k
 
 
 
-# Data
+# [Data](https://github.com/Ckrenzer/Skill-Showcase/tree/main/data)
 
-## CSV
+## [CSV](https://github.com/Ckrenzer/Skill-Showcase/tree/main/data/csv)
 
 ### LJMR
 Short for 'La Junta Market Reports'. Collected from [Winter Livestock's weekly market reports](http://www.winterlivestock.com/lajunta.php#marketreport). See the full data set on [Winter-Livestock-Data](https://github.com/Ckrenzer/Winter-Livestock-Data).
@@ -51,7 +49,7 @@ Contains a subset of cattle sales I've been scraping since November, 2020. The c
 
 
 
-## TXT
+## [TXT](https://github.com/Ckrenzer/Skill-Showcase/tree/main/data/txt)
 
 ### CRISTO
 
