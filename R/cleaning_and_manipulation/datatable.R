@@ -5,14 +5,10 @@
 
 
 # Notes -----------------------------------------------------------------------
-# data.table::frollsum() and my custom lagsum() from tidyverse.R handle
-# missing values differently, but they more or less do the same thing.
-# Each operation results in values identical to those in tidyverse.R
-# (with the one exception being small differences between frollsum()
-# and lagsum()).
-# This file uses more intermediate values. Sometimes this choice is to
-# preserve the 80-characters-per-line limit, while other times the
-# intermediate values simply makes the code easier to read.
+# This file uses more intermediate values than are probably necessary.
+# Sometimes this choice is to preserve the 80-characters-per-line convention,
+# while other times the intermediate values simply make the code
+# easier to read.
 
 
 # Packages --------------------------------------------------------------------
@@ -34,9 +30,6 @@ cattle <- fread("data/csv/lmjr.csv",
                 nThread = 8)
 
 # Weather data from a facility near the sale barns in the cattle data set
-# Data pulled from this link via web scraping behind the scenes:
-# http://climate.colostate.edu/data_access.html
-# (I took some liberties to showcase different cleaning techniques)
 weather <- fread("data/csv/cheraw_1_n_weather_station_data.csv",
                  colClasses = c("character",
                                 "character",
@@ -47,7 +40,7 @@ weather <- fread("data/csv/cheraw_1_n_weather_station_data.csv",
 
 
 # Formatting ------------------------------------------------------------------
-# Standardizing column names and date formatting
+# Standardizing columns
 setnames(cattle, old = colnames(cattle), str_to_lower(colnames(cattle)))
 cattle[, date := as.Date(date, "%Y-%m-%d")]
 
@@ -111,7 +104,6 @@ vapply(weekly_sales_wide[, ..numeric_cols], function(x) sum(is.na(x)), integer(1
 
 # Joining ---------------------------------------------------------------------
 # How was the weather on sale days?
-#setnames(weather, old = "record_date", new = "date")
 business_climate <- weather[weekly_sales, on = .(record_date = date)]
 
 

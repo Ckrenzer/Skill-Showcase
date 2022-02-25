@@ -31,9 +31,6 @@ cattle <- read_csv("data/csv/lmjr.csv",
   rename_with(str_to_lower)
 
 # Weather data from a facility near the sale barns in the cattle data set
-# Data pulled from this link via web scraping behind the scenes:
-# http://climate.colostate.edu/data_access.html
-# (I took some liberties to showcase different cleaning techniques)
 weather <- read_csv("data/csv/cheraw_1_n_weather_station_data.csv",
                     col_types = list("c", "c", "c", "c", "c"),
                     num_threads = 8,
