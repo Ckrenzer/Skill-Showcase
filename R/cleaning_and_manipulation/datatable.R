@@ -47,7 +47,7 @@ cattle[, date := as.Date(date, "%Y-%m-%d")]
 # Date formatting
 month_nums <- structure(seq_along(month.abb), names = month.abb)
 weather[, `:=`(c("d", "m", "y"), tstrsplit(record_date, "-"))]
-weather <- weather[as.integer(y) >= 2016L]
+weather <- weather[as.integer(y) >= 2019L]
 weather[, m := month_nums[m]]
 weather[, record_date := as.Date(paste(d, m, y, sep = "-"), "%d-%m-%Y")]
 weather[, `:=`(d = NULL, m = NULL, y = NULL)]

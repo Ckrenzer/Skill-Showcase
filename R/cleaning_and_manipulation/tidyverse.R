@@ -43,7 +43,7 @@ month_nums <- structure(seq_along(month.abb), names = month.abb)
 weather <- weather %>%
   separate(record_date, into = c("d", "m", "y")) %>% 
   mutate(m = month_nums[m]) %>% 
-  filter(as.integer(y) >= 2016L) %>% 
+  filter(as.integer(y) >= 2019L) %>% 
   unite(col = record_date, d, m, y, sep = "-") %>% 
   mutate(record_date = as.Date(record_date, "%d-%m-%Y"))
 
