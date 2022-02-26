@@ -18,7 +18,7 @@ if(!require(stringr)) install.packages("stringr"); library(stringr)
 
 # Data import -----------------------------------------------------------------
 ## Cattle market reports
-cattle <- fread("data/csv/lmjr.csv",
+cattle <- fread("data/csv/ljmr.csv",
                 colClasses = c(
                   "character",
                   "character",

@@ -18,7 +18,7 @@ if(!require(stringr)) install.packages("stringr"); library(stringr)
 
 # Data import -----------------------------------------------------------------
 ## Cattle market reports
-cattle <- read_csv("data/csv/lmjr.csv",
+cattle <- read_csv("data/csv/ljmr.csv",
                    col_types = list(col_date(format = "%Y-%m-%d"),
                                     col_character(),
                                     col_double(),
