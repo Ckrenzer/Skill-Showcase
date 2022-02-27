@@ -16,9 +16,10 @@ fed <- read_lines("data/txt/fomcminutes20200315.txt", num_threads = 8)
 
 
 # The Pattern -----------------------------------------------------------------
-# The FOMC Minutes record all members present at the meeting, naming each
-# participant's name and title. Finding the chairman should be pretty easy,
-# then, no? Simply assemble a name and then use a lookahead for "chair".
+# The FOMC Minutes record all members present at the meeting, listing each
+# participant's name and title at the start of the meeting.
+# Finding the chairman should be pretty easy, then, no?
+# Simply assemble a name and then use a lookahead for "chair".
 name <- "[a-z]+\\.*"
 middle <- "[a-z]*\\.*"
 
