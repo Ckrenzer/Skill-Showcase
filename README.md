@@ -1,5 +1,5 @@
 # Skill-Showcase
-Provides code samples for different coding applications and frameworks. My aim is to give you a big picture idea of 'what I know.'
+Provides code samples for different languages and frameworks. My aim is to give you a big picture idea of 'what I know.'
 
 
 
