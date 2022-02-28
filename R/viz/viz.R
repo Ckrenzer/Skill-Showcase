@@ -9,18 +9,18 @@ rm(weather, weekly_sales, month_nums, default_values, laglen, lagsum)
 
 
 # Functions -------------------------------------------------------------------
+## My approach here doesn't work that well in R. Essentially, I take the
+## previous n elements from the input x and take their mean.
 sma <- function(x, prev_periods = 0L){
   prev_periods <- as.integer(prev_periods)
   stopifnot(length(prev_periods) == 1L,
             !is.na(prev_periods),
             prev_periods >= 0L,
             length(x) > prev_periods)
-  prev_periods <- prev_periods + 1
   
-  ma <- double(length(x))
-  ma[1:(prev_periods-1)] <- NA
-  for(i in prev_periods:length(x)){
-    ma[i] <- mean(x[(i-(prev_periods-1)):i], na.rm = TRUE)
+  ma <- c(rep(NA, prev_periods), double(length(x) - prev_periods))
+  for(i in (prev_periods + 1):length(x)){
+    ma[i] <- mean(x[(i - prev_periods):i], na.rm = TRUE)
   }
   ma
 }
