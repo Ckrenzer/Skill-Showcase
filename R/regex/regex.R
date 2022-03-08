@@ -30,7 +30,7 @@ rgexpr <- str_glue("{pattern}{lookahead}")
 
 
 # Tests -----------------------------------------------------------------------
-# Regular expressions are unruly things. Always test them thoroughly.
+# Regular expressions are unruly things. Test them thoroughly.
 tests <- list(
   TRUE_tests = c(
     "jerome hayden powell chair",   #full name

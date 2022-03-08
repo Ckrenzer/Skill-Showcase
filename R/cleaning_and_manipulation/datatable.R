@@ -106,6 +106,12 @@ vapply(weekly_sales_wide[, ..numeric_cols], function(x) sum(is.na(x)), integer(1
 # How was the weather on sale days?
 business_climate <- weather[weekly_sales, on = .(record_date = date)]
 
+# Alternatively, we could join by reference:
+weekly_sales[weather, on = .(date = record_date), `:=`(maxtemp = maxtemp,
+                                                       mintemp = mintemp,
+                                                       pcpn = pcpn,
+                                                       snow = snow)]
+
 
 # Lags ------------------------------------------------------------------------
 # The amount of snowfall in the previous two weeks likely affects cattle sales

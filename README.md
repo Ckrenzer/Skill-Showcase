@@ -9,7 +9,9 @@ Provides code samples for different languages and frameworks. My aim is to give 
 
 
 ## [R](https://github.com/Ckrenzer/Skill-Showcase/tree/main/R)
-January 27th, 2020 was the day when I wrote my first ever line of code. It was written in R. Much has changed since the beginning of 2020, but I've since fallen in love with the language and decided to see how far I could take it! R is essentially my means of making a living and for that I am grateful. I'm a dplyr guy at heart, but data.table has been the primary tool my co-workers use. That necessarily makes data.table my primary tool in professional settings. Personally, I find data.table unintuitive and hard to fit on one line; data.table sacrifices intuition and readability for speed. You see, R was never meant to be 'fast'--it is supposed to simplify data analysis. To this end, dplyr complements R's strengths as a language quite well. If you want to know what I *really* think, data.table compensates R's slower run time speed but stifles the features of the language that make it stand out from competitors (Python, primarily) with its nebulous syntax. I think that if you have to rely on data.table for your everyday work, you are using the wrong tool for the job--Julia seems better suited for these tasks. I do appreciate data.table's backward compatibility, however.
+January 27th, 2020 was the day I wrote my first ever line of code. It was written in R. Much has changed since the beginning of 2020, but I've since fallen in love with the language and decided to see how far I can take it! R is essentially my means of making a living and for that I am grateful. I'm a dplyr guy at heart, but data.table is the primary tool my co-workers use. That necessarily makes data.table my primary tool in professional settings.
+
+I personally find data.table unintuitive and hard to fit on one line; data.table sacrifices intuition and readability for speed. You see, R was never meant to be 'fast'--it is supposed to simplify data analysis. To this end, dplyr complements R's strengths as a language quite well. If you want to know what I *really* think, data.table compensates for R's slower run time speed by hindering the features of the language that make it stand out from competitors (Python, primarily) due to its nebulous syntax. There is nothing about the word 'melt' that indicates a conversion of data to the long format. I think that if you have to rely on data.table for your everyday work, you are using the wrong tool for the job--Julia seems better suited for these tasks. I do appreciate data.table's backward compatibility, however.
 
 
 
@@ -28,7 +30,7 @@ I was, unfortunately, born a Windows user. I used XP as a kid and never really k
 ### LJMR
 Short for 'La Junta Market Reports'. Collected from [Winter Livestock's weekly market reports](http://www.winterlivestock.com/lajunta.php#marketreport). See the full data set on [Winter-Livestock-Data](https://github.com/Ckrenzer/Winter-Livestock-Data).
 
-Contains a subset of cattle sales I've been scraping since November, 2020. The column 'Reprod' corresponds to whether the livestock is a cow, bull, steer, or heifer. I didn't know a good name for this categorization, so 'Reprod' is what I tentatively decided on in December 2020. I couldn't find an industry standard. Unless there is a word used as the industry standard to classify this distinction, 'Reprod' is what I plan to continue using for the foreseeable future.
+Contains a subset of cattle sales I've been scraping since November, 2020. The column 'Reprod' corresponds identifies the livestock as a cow, bull, steer, or heifer. I didn't know a good name for this categorization, so 'Reprod' is what I tentatively decided on in December 2020. I couldn't find an industry standard. Unless there is a word used as the industry standard to classify this distinction, 'Reprod' is what I plan to continue using for the foreseeable future.
 
 - **Date:** The date in which the auction ('Sale Tuesday') takes place. The first day is used for multi-day auctions.
 - **Buyer:** The name of the buyer who made a purchase.
@@ -39,7 +41,7 @@ Contains a subset of cattle sales I've been scraping since November, 2020. The c
 - **Reprod:** The 'reproductive status' of the livestock. Was it a cow, bull, steer, or heifer?
 
 ### CHERAW_1_N_WEATHER_STATION
-'CHERAW_1_N' is a weather station near La Junta, CO. This was scraped from Colorado State's [Colorado Climate Center](http://climate.colostate.edu/data_access.html). I took some liberties 'dirtying' the date column behind the scenes to showcase different cleaning techniques, so the format provided by CSU's website will look different.
+'CHERAW_1_N' is a weather station near La Junta, CO. This was scraped from Colorado State's [Colorado Climate Center](http://climate.colostate.edu/data_access.html). I took some liberties 'dirtying' the date column behind the scenes to showcase different cleaning techniques, so the table provided on CSU's website will look different from the csv file in this repo.
 
 - **record_date:** The date that weather data was collected. Recorded daily.
 - **maxtemp:** The day's maximum recorded temperature in Fahrenheit.
