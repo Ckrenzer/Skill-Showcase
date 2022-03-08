@@ -57,3 +57,23 @@ price_avgs %>%
                                 "ma" = "black"),
                      labels = c("Median", "Mean", "Wt.Mean", "Mv.Avg")) +
   theme(legend.position = c(.95, .375))
+
+
+# The weather
+business_climate
+
+
+# Need to create a mapping for temperatures: average min, max temp for each year
+#monthly_temps <- 
+  business_climate %>% f
+
+business_climate %>% 
+mutate(py_mintemp = lag(mintemp, n = 50),
+       py_maxtemp = lag(maxtemp, n = 50),
+       py_date = lag(date, 50)) %>% 
+  pivot_longer(c(mintemp, maxtemp, py_mintemp, py_maxtemp),
+               names_to = "measure",
+               values_to = "temp",
+               names_pattern = "(.*)temp") %>% 
+  ggplot(mapping = aes(x = date)) +
+  geom_line(mapping = aes(y = temp, color = measure))
