@@ -14,6 +14,7 @@
 # Packages --------------------------------------------------------------------
 if(!require(data.table)) install.packages("data.table"); library(data.table)
 if(!require(stringr)) install.packages("stringr"); library(stringr)
+if(!require(clock)) install.packages("clock"); library(clock)
 
 
 # Data import -----------------------------------------------------------------
@@ -86,31 +87,45 @@ unique(cattle[, .(buyer, date)])[, .N, by = date][order(-N)]
 # For each sale, which three buyers bought the most livestock?
 ##                         Aggregate to find top buyers                         Sort
 top_quantities <- cattle[, .(quantity = sum(quantity)), keyby = .(date, buyer)][order(date, -quantity)]
-top_quantities_indexes <- topquantities[, .(indexes = .I[1:3]), by = .(date)]$indexes
+top_quantities_indexes <- top_quantities[, .(indexes = .I[1:3]), by = .(date)]$indexes
 top_quantities[top_quantities_indexes]
 
 # Aggregate market reports by price
 weekly_sales <- cattle[, .(avg_price = median(price)), keyby = .(date, reprod)]
 
+# Aggregate weeks in weather to the next Tuesday
+tuesday <- weekday(clock_weekdays$tuesday)
+weather[, next_tues := as_date(as_naive_time(record_date) + (tuesday - as_weekday(record_date)))]
+weather <- weather[,
+                   .(maxtemp = mean(maxtemp), mintemp = mean(mintemp), pcpn = sum(pcpn), snow = sum(snow)),
+                   next_tues]
+
 
 # Pivot Operations ------------------------------------------------------------
 # How many weeks did each cattle reproductive status have zero reported sales?
 numeric_cols <- unique(weekly_sales[!is.na(reprod)]$reprod)
-weekly_sales_wide <- dcast(weekly_sales[!is.na(reprod)],
+weekly_sales_wide <- dcast(weekly_sales,
                            formula = date ~ reprod,
                            value.var = "avg_price")
 vapply(weekly_sales_wide[, ..numeric_cols], function(x) sum(is.na(x)), integer(1))
 
+# Cheap and dirty way of inserting missing values for those
+# sales when a given reproductive status was not purchased
+weekly_sales <- melt(weekly_sales_wide,
+                     id.vars = "date",
+                     measure.vars = c("bull", "cow", "hfr", "str"),
+                     value.name = "avg_price")
+
 
 # Joining ---------------------------------------------------------------------
 # How was the weather on sale days?
-business_climate <- weather[weekly_sales, on = .(record_date = date)]
+business_climate <- weather[weekly_sales, on = .(next_tues = date)]
 
 # Alternatively, we could join by reference:
-weekly_sales[weather, on = .(date = record_date), `:=`(maxtemp = maxtemp,
-                                                       mintemp = mintemp,
-                                                       pcpn = pcpn,
-                                                       snow = snow)]
+weekly_sales[weather, on = .(date = next_tues), `:=`(maxtemp = maxtemp,
+                                                     mintemp = mintemp,
+                                                     pcpn = pcpn,
+                                                     snow = snow)]
 
 
 # Lags ------------------------------------------------------------------------

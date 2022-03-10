@@ -14,6 +14,7 @@ if(!require(readr)) install.packages("readr"); library(readr)
 if(!require(dplyr)) install.packages("dplyr"); library(dplyr)
 if(!require(tidyr)) install.packages("tidyr"); library(tidyr)
 if(!require(stringr)) install.packages("stringr"); library(stringr)
+if(!require(clock)) install.packages("clock"); library(clock)
 
 
 # Data import -----------------------------------------------------------------
@@ -90,12 +91,23 @@ weekly_sales <- cattle %>%
   group_by(date, reprod) %>% 
   summarize(avg_price = median(price), .groups = "drop")
 
+# Aggregate weeks in weather to the next Tuesday
+tuesday <- weekday(clock_weekdays$tuesday)
+weather <- weather %>% 
+  mutate(next_tues = as_naive_time(record_date) + (tuesday - as_weekday(record_date)),
+         next_tues = as_date(next_tues)) %>% 
+  group_by(next_tues) %>% 
+  summarize(maxtemp = mean(maxtemp),
+            mintemp = mean(mintemp),
+            pcpn = sum(pcpn),
+            snow = sum(snow))
+
 
 # Pivot Operations ------------------------------------------------------------
 # How many weeks did each cattle reproductive status have zero reported sales?
-weekly_sales %>% 
-  filter(!is.na(reprod)) %>% 
-  pivot_wider(names_from = reprod, values_from = avg_price) %>% 
+weekly_sales_wide <- weekly_sales %>% 
+  pivot_wider(names_from = reprod, values_from = avg_price)
+weekly_sales_wide %>% 
   summarize(
     across(
       where(~ class(.x) == "numeric"),
@@ -103,11 +115,20 @@ weekly_sales %>%
     )
   )
 
+# Cheap and dirty way of inserting missing values for those
+# sales when a given reproductive status was not purchased
+weekly_sales <- weekly_sales_wide %>% 
+  pivot_longer(cols = c(hfr, str, cow, bull),
+               names_to = "reprod",
+               names_pattern = "([a-z]+)$",
+               values_to = "avg_price",
+               values_drop_na = FALSE)
+
 
 # Joining ---------------------------------------------------------------------
 # How was the weather on sale days?
 business_climate <- left_join(weekly_sales, weather,
-                              by = c("date" = "record_date"))
+                              by = c("date" = "next_tues"))
 
 
 # Lags ------------------------------------------------------------------------

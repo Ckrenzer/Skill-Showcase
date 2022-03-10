@@ -5,7 +5,7 @@ if(!require(patchwork)) install.packages("patchwork"); library(patchwork)
 
 # Import data from tidyverse.R ------------------------------------------------
 source("R/cleaning_and_manipulation/tidyverse.R")
-rm(weather, weekly_sales, month_nums, default_values, laglen, lagsum)
+rm(weather, weekly_sales, weekly_sales_wide, month_nums, default_values, tuesday, lagsum, laglen)
 
 
 # Functions -------------------------------------------------------------------
@@ -59,18 +59,38 @@ price_avgs %>%
   theme(legend.position = c(.95, .375))
 
 
-# The weather
-business_climate
 
 
-# Need to create a mapping for temperatures: average min, max temp for each year
-#monthly_temps <- 
-  business_climate %>% f
 
+
+
+
+
+
+# INCORPORATE 'GREATEST HITS' FROM OTHER SCRIPTS
+# INCLUDE SOPHISTICATED GGPLOTS
+## PERHAPS YOU SHOULD SPLIT VIZ/ DOWN BY PACKAGE
+# INCLUDE MORE THAN GGPLOT--PLOTLY? LEAFLET?
+
+
+
+
+
+
+# NEED TO FIND A WAY TO MAP THE CURRENT YEAR TO THE PREVIOUS YEAR
 business_climate %>% 
-mutate(py_mintemp = lag(mintemp, n = 50),
-       py_maxtemp = lag(maxtemp, n = 50),
-       py_date = lag(date, 50)) %>% 
+  mutate(m = month(date), y = year(date)) %>% 
+  group_by(m, y, reprod) %>% 
+  mutate(week = row_number())
+
+
+
+
+# NEED TO FIND A WAY TO MAP THE CURRENT YEAR TO THE PREVIOUS YEAR
+business_climate %>% 
+  mutate(py_mintemp = lag(mintemp, n = 52),
+         py_maxtemp = lag(avg_max, n = 52),
+         py_date = lag(date, 50)) %>% 
   pivot_longer(c(mintemp, maxtemp, py_mintemp, py_maxtemp),
                names_to = "measure",
                values_to = "temp",
